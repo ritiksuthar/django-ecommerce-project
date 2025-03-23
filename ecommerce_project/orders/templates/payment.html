@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5 p-4">
+    <div class="card mx-auto" style="max-width: 500px;">
+        <div class="card-body">
+            <h2 class="text-center mb-4">Pay for {{ product.name }}</h2>
+            
+            <p class="text-center">Amount: <strong>₹{{ amount }}</strong></p>
+            
+            <!-- Razorpay Payment Button -->
+            <form action="{% url 'payment_success' %}" method="POST" class="text-center">
+                <script src="https://checkout.razorpay.com/v1/checkout.js"
+                        data-key="{{ razorpay_key }}"        
+                        data-amount="{{ amount|floatformat:2 }}" 
+                        data-currency="INR"
+                        data-order_id="{{ order_id }}"     
+                        data-buttontext="Pay Now"        
+                        data-name="OnStore"
+                        data-description="Test Transaction"
+                        data-image="https://example.com/logo.png"
+                        data-theme.color="#0d6efd"
+                ></script>
+                
+                <!-- CSRF token -->
+                <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4 p-5">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h2 class="mb-0">Track Your Order</h2>
+        </div>
+        <div class="card-body">
+            <p><strong>Order ID:</strong> {{ order.id }}</p>
+            <p><strong>Status:</strong> <span class="badge 
+                {% if orders.order_status == "Pending" %} bg-warning 
+                {% elif orders.order_status == "Confirmed" %} bg-info 
+                {% elif orders.order_status == "Shipped" %} bg-primary 
+                {% elif orders.order_status == "Delivered" %} bg-success 
+                {% else %} bg-danger {% endif %}">
+                {{ orders.order_status }}</span></p>
+            <p><strong>Placed on:</strong> {{ order.created_at|date:"D, d M Y H:i" }}</p>
+
+            <h3 class="mt-4">Order Items:</h3>
+            <ul class="list-group">
+                {% for item in order.cart.all %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        {{ item.name }} - {{ item.quantity }} x ₹{{ item.price }}
+                    </li>
+                {% endfor %}
+            </ul>
+
+            <div class="mt-4 alert 
+                {% if order.order_status == "Pending" %} alert-warning 
+                {% elif s.order_status == "Confirmed" %} alert-info 
+                {% elif orders.order_status == "Shipped" %} alert-primary 
+                {% elif orders.order_status == "Delivered" %} alert-success 
+                {% else %} alert-danger {% endif %}">
+                {% if orders.order_status == "Pending" %}
+                    <p>Your order is pending. It will be processed soon.</p>
+                {% elif orders.order_status == "Confirmed" %}
+                    <p>Your order has been confirmed and is being packed.</p>
+                {% elif orders.order_status == "Shipped" %}
+                    <p>Your order has been shipped and is on its way.</p>
+                {% elif orders.order_status == "Delivered" %}
+                    <p>Your order has been delivered. Thank you for shopping with us!</p>
+                {% else %}
+                    <p>The order has been cancelled.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
